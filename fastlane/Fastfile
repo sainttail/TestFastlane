@@ -1,0 +1,33 @@
+#!/usr/bin/ruby
+
+default_platform :ios
+
+opt_out_usage
+skip_docs
+
+def set_build_number(params)
+
+  set_info_plist_value(
+    key: 'CFBundleVersion',
+    value: '2222',
+    path: params[:plist_path]
+  )
+end
+
+platform :ios do
+
+  plist_path = 'TestFastlane/Info.plist'
+  xcodeproj  = 'TestFastlane.xcodeproj'
+
+  desc "Builds a beta ipa and uploads it to internal app store and crashlytics"
+  lane :beta do |options|
+  
+    update_info_plist(
+      display_name: 'new name',
+      plist_path: plist_path,
+      xcodeproj: xcodeproj
+    )
+
+    set_build_number(plist_path: plist_path)
+  end
+end
